@@ -108,8 +108,6 @@ void callback_rgb_info(const sensor_msgs::CameraInfo& data)
 		last_rgb_info     = data.header.stamp.toSec();
 		accept_rgb_info   = false;
 		accept_rgb_rect   = true;
-		accept_depth_info = true;
-		accept_depth_rect = false;
 	}
 }
 
