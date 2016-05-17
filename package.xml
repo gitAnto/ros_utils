@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package>
+  <name>rgbd_throttle</name>
+  <version>0.1.0</version>
+  <description>The rgbd_throttle package</description>
+
+  <maintainer email="antoniocoratelli@gmail.com">Antonio Coratelli</maintainer>
+  <author email="antoniocoratelli@gmail.com">Antonio Coratelli</author>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export></export>
+</package>
