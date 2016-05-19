@@ -142,14 +142,16 @@ int main(int argc, char **argv)
     ROS_INFO("Initializing node '%s' ...", NAME);
 
     // Read Params
-    n.param<double>("rate", rate, RATE); secs = 1.0 / rate;
+    n.param<double>("rate", rate, RATE);
+    secs = 1.0 / rate;
     ROS_INFO("Time between frames: %f seconds.", secs);
 
     // Initialize Variables
-    bool accept_rgb_info   = true;
-    bool accept_rgb_rect   = false;
-    bool accept_depth_info = false;
-    bool accept_depth_rect = false;
+    last_rgb_info     = 0;
+    accept_rgb_info   = true;
+    accept_rgb_rect   = false;
+    accept_depth_info = false;
+    accept_depth_rect = false;
 
     // Advertise Publishers
     pub_rgb_info   = n.advertise<sensor_msgs::CameraInfo>(RGB_INFO_OUT,   BUFFER_OUT);
