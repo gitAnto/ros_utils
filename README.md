@@ -41,8 +41,8 @@ This node limits the frame rate of an RGBD camera.
   Throttled Depth Image.
 
 #### Params
-- `rate` *double* (default `5.0`)
-Maximum framerate allowed.
+- `rate` *double* (default `5.0`)<br/>
+  Maximum framerate allowed.
 
 
 ### tf_link_map_to_world
