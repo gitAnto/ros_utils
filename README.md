@@ -47,7 +47,7 @@ This node limits the frame rate of an RGBD camera.
 
 ### tf_link_map_to_world
 This package links a disconnected sub-tree to the `/tf` root.
-Suppose you have a /tf tree similar to this:
+Suppose you have a `/tf` tree similar to this:
 ```
 /world +
        |--- /vicon/robot_name
