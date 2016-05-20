@@ -41,7 +41,7 @@ This node limits the frame rate of an RGBD camera.
   Throttled Depth Image.
 
 #### Params
-- `rate` *double* (default `5.0`)<br/>
+- `rate` *double* (default "5.0")<br/>
   Maximum framerate allowed.
 
 
@@ -62,13 +62,13 @@ between `/world` and `/map` is given by the first transform from
 `/world` to `/vicon/robot_name`, you can use this node.
 
 #### Params
-- `frame_world` *string* (default `/world`)<br/>
+- `frame_world` *string* (default "/world")<br/>
   Frame attached to the absolute reference frame origin.
-- `frame_groundtruth` *string* (default `/vicon/puma/puma`)<br/>
+- `frame_groundtruth` *string* (default "/vicon/puma/puma")<br/>
   Frame attached to the ground truth pose of the robot.
-- `frame_map` *string* (default `/map`)<br/>
+- `frame_map` *string* (default "/map")<br/>
   Frame attached to the robot's relative reference frame origin.
-- `rate` *double* (default `10.0`)<br/>
+- `rate` *double* (default "10.0")<br/>
   Frequency of the tf broadcaster.
 
 
@@ -81,13 +81,13 @@ file. Each line of the file contains (in order):
 ```
 
 #### Params
-- `frame_world` *string* (default `/world`)<br/>
+- `frame_world` *string* (default "/world")<br/>
   Frame attached to the absolute reference frame origin.
-- `frame_groundtruth` *string* (default `/vicon/puma/puma`)<br/>
+- `frame_groundtruth` *string* (default "/vicon/puma/puma")<br/>
   Frame attached to the ground truth pose of the robot.
-- `frame_baselink` *string* (default `/base_link`)<br/>
+- `frame_baselink` *string* (default "/base_link")<br/>
   Frame attached to the robot, in its relative reference frame.
-- `rate` *double* (default `10.0`)<br/>
+- `rate` *double* (default "10.0")<br/>
   Frequency of the tf listener.
 - `csv_filename` *string* (default: "%Y_%m_%d_%H_%M_%S.csv")<br/>
   Output filename.
