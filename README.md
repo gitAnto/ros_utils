@@ -1,6 +1,6 @@
 # ros_utils
 
-ROS catkin package containing some useful nodes.
+ROS catkin package containing some simple but useful nodes.
 
 
 
@@ -21,7 +21,7 @@ BSD 3-Clause. See `LICENSE` file.
 This node limits the frame rate of an RGBD camera.
 
 #### Subscribed Topics
-- `rgb/info_in` *sensor_msgs::CameraInfo*
+- `rgb/info_in` *sensor_msgs::CameraInfo*<br/>
 RGB CameraInfo.
 - `rgb/rect_in` *sensor_msgs::Image*
 RGB Image.
