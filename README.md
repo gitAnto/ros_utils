@@ -22,23 +22,23 @@ This node limits the frame rate of an RGBD camera.
 
 #### Subscribed Topics
 - `rgb/info_in` *sensor_msgs::CameraInfo*<br/>
-RGB CameraInfo.
-- `rgb/rect_in` *sensor_msgs::Image*
-RGB Image.
-- `depth/info_in` *sensor_msgs::CameraInfo*
-Depth CameraInfo.
-- `depth/rect_in` *sensor_msgs::Image*
-Depth Image.
+  RGB CameraInfo.
+- `rgb/rect_in` *sensor_msgs::Image*<br/>
+  RGB Image.
+- `depth/info_in` *sensor_msgs::CameraInfo*<br/>
+  Depth CameraInfo.
+- `depth/rect_in` *sensor_msgs::Image*<br/>
+  Depth Image.
 
 #### Published Topics
-- `rgb/info_out` *sensor_msgs::CameraInfo*
-Throttled RGB CameraInfo.
-- `rgb/rect_out` *sensor_msgs::Image*
-Throttled RGB Image.
-- `depth/info_out` *sensor_msgs::CameraInfo*
-Throttled Depth CameraInfo.
-- `depth/rect_out` *sensor_msgs::Image*
-Throttled Depth Image.
+- `rgb/info_out` *sensor_msgs::CameraInfo*<br/>
+  Throttled RGB CameraInfo.
+- `rgb/rect_out` *sensor_msgs::Image*<br/>
+  Throttled RGB Image.
+- `depth/info_out` *sensor_msgs::CameraInfo*<br/>
+  Throttled Depth CameraInfo.
+- `depth/rect_out` *sensor_msgs::Image*<br/>
+  Throttled Depth Image.
 
 #### Params
 - `rate` *double* (default `5.0`)
@@ -62,14 +62,14 @@ between `/world` and `/map` is given by the first transform from
 `/world` to `/vicon/robot_name`, you can use this node.
 
 #### Params
-- `frame_world` *string* (default `/world`)
-Frame attached to the absolute reference frame origin.
-- `frame_groundtruth` *string* (default `/vicon/puma/puma`)
-Frame attached to the ground truth pose of the robot.
-- `frame_map` *string* (default `/map`)
-Frame attached to the robot's relative reference frame origin.
-- `rate` *double* (default `10.0`)
-Frequency of the tf broadcaster.
+- `frame_world` *string* (default `/world`)<br/>
+  Frame attached to the absolute reference frame origin.
+- `frame_groundtruth` *string* (default `/vicon/puma/puma`)<br/>
+  Frame attached to the ground truth pose of the robot.
+- `frame_map` *string* (default `/map`)<br/>
+  Frame attached to the robot's relative reference frame origin.
+- `rate` *double* (default `10.0`)<br/>
+  Frequency of the tf broadcaster.
 
 
 ### tf_eval
@@ -81,16 +81,16 @@ file. Each line of the file contains (in order):
 ```
 
 #### Params
-- `frame_world` *string* (default `/world`)
-Frame attached to the absolute reference frame origin.
-- `frame_groundtruth` *string* (default `/vicon/puma/puma`)
-Frame attached to the ground truth pose of the robot.
-- `frame_baselink` *string* (default `/base_link`)
-Frame attached to the robot, in its relative reference frame.
-- `rate` *double* (default `10.0`)
-Frequency of the tf listener.
-- `csv_filename` *string* (default: "%Y_%m_%d_%H_%M_%S.csv")
-Output filename.
-- `csv_delimiter` *string* (default: " ")
-Csv field delimiter.
+- `frame_world` *string* (default `/world`)<br/>
+  Frame attached to the absolute reference frame origin.
+- `frame_groundtruth` *string* (default `/vicon/puma/puma`)<br/>
+  Frame attached to the ground truth pose of the robot.
+- `frame_baselink` *string* (default `/base_link`)<br/>
+  Frame attached to the robot, in its relative reference frame.
+- `rate` *double* (default `10.0`)<br/>
+  Frequency of the tf listener.
+- `csv_filename` *string* (default: "%Y_%m_%d_%H_%M_%S.csv")<br/>
+  Output filename.
+- `csv_delimiter` *string* (default: " ")<br/>
+  Csv field delimiter.
 
