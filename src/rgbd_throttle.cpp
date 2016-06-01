@@ -38,33 +38,26 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "sensor_msgs/Image.h"
 
 // General Defines
-
 #define NAME "rgbd_throttle"
 
 // Default Param Defines
-
 #define RATE 5.0
 
 // Input Defines
-
 #define RGB_INFO_IN   "rgb/info_in"
 #define RGB_RECT_IN   "rgb/rect_in"
 #define DEPTH_INFO_IN "depth/info_in"
 #define DEPTH_RECT_IN "depth/rect_in"
-
 #define BUFFER_IN 1
 
 // Output Defines
-
 #define RGB_INFO_OUT   "rgb/info_out"
 #define RGB_RECT_OUT   "rgb/rect_out"
 #define DEPTH_INFO_OUT "depth/info_out"
 #define DEPTH_RECT_OUT "depth/rect_out"
-
 #define BUFFER_OUT 1
 
 // Global Variables
-
 ros::Publisher pub_rgb_info;
 ros::Publisher pub_rgb_rect;
 ros::Publisher pub_depth_info;
@@ -72,63 +65,41 @@ ros::Publisher pub_depth_rect;
 
 double rate;
 double secs;
+double last_sent;
 
-double last_rgb_info;
+sensor_msgs::CameraInfo rgb_info;
+sensor_msgs::Image      rgb_rect;
+sensor_msgs::CameraInfo depth_info;
+sensor_msgs::Image      depth_rect;
 
-bool accept_rgb_info;
-bool accept_rgb_rect;
-bool accept_depth_info;
-bool accept_depth_rect;
+// Callbacks
 
 void callback_rgb_info(const sensor_msgs::CameraInfo& data)
 {
-    if (data.header.stamp.toSec() <  last_rgb_info - secs)
-    {
-        last_rgb_info = 0;
-    }
-
-    if (data.header.stamp.toSec() >= last_rgb_info + secs)
-    {
-        accept_rgb_info   = true;
-        accept_rgb_rect   = false;
-        accept_depth_info = true;
-        accept_depth_rect = false;
-    }
-
-    if (accept_rgb_info == true)
-    {
-        pub_rgb_info.publish(data);
-        last_rgb_info     = data.header.stamp.toSec();
-        accept_rgb_info   = false;
-        accept_rgb_rect   = true;
-    }
+    rgb_info = data;
 }
 
 void callback_rgb_rect(const sensor_msgs::Image& data)
 {
-    if (accept_rgb_rect == true)
-    {
-        pub_rgb_rect.publish(data);
-        accept_rgb_rect = false;
-    }
+    rgb_rect = data;
 }
 
 void callback_depth_info(const sensor_msgs::CameraInfo& data)
 {
-    if (accept_depth_info == true)
-    {
-        pub_depth_info.publish(data);
-        accept_depth_info = false;
-        accept_depth_rect = true;
-    }
+    depth_info = data;
 }
 
 void callback_depth_rect(const sensor_msgs::Image& data)
 {
-    if (accept_depth_rect == true)
+    depth_rect = data;
+
+    if (data.header.stamp.toSec() >= last_sent + secs)
     {
-        pub_depth_rect.publish(data);
-        accept_depth_rect = false;
+        pub_rgb_info.publish(rgb_info);
+        pub_rgb_rect.publish(rgb_rect);
+        pub_depth_info.publish(depth_info);
+        pub_depth_rect.publish(depth_rect);
+        last_sent = data.header.stamp.toSec();
     }
 }
 
@@ -147,11 +118,7 @@ int main(int argc, char **argv)
     ROS_INFO("Time between frames: %f seconds.", secs);
 
     // Initialize Variables
-    last_rgb_info     = 0;
-    accept_rgb_info   = true;
-    accept_rgb_rect   = false;
-    accept_depth_info = false;
-    accept_depth_rect = false;
+    last_sent = 0;
 
     // Advertise Publishers
     pub_rgb_info   = n.advertise<sensor_msgs::CameraInfo>(RGB_INFO_OUT,   BUFFER_OUT);
