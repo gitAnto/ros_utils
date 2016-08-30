@@ -42,9 +42,9 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libnoise
 {
-    template <typename T> Pose import(T);
+    template <typename T> Pose fromROS(T) { /**/ }
 
-    template <> Pose import(const geometry_msgs::Pose in)
+    template <> Pose fromROS(const geometry_msgs::Pose in)
     {
         Pose out;
         out.x = in.position.x;
@@ -57,14 +57,14 @@ namespace libnoise
         return out;
     }
 
-    template <> Pose import(const geometry_msgs::PoseStamped in)
+    template <> Pose fromROS(const geometry_msgs::PoseStamped in)
     {
-        return import(in.pose);
+        return fromROS(in.pose);
     }
 
-    template <typename T> T export(Pose, T);
+    template <typename T> T toROS(Pose, T) { /**/ }
 
-    template <> geometry_msgs::Pose export(Pose in, geometry_msgs::Pose base)
+    template <> geometry_msgs::Pose toROS(Pose in, geometry_msgs::Pose base)
     {
         base.position.x = in.x;
         base.position.y = in.y;
@@ -76,11 +76,11 @@ namespace libnoise
         return base;
     }
 
-    template <> geometry_msgs::PoseStamped export(Pose in, geometry_msgs::PoseStamped base)
+    template <> geometry_msgs::PoseStamped toROS(Pose in, geometry_msgs::PoseStamped base)
     {
-        base.pose = export(in, base.pose);
+        base.pose = toROS(in, base.pose);
         return base;
     }
 
-
+}
 #endif

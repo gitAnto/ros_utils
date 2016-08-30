@@ -39,8 +39,11 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "libnoise.hpp"
 #include "libnoise_conversions.hpp"
 
-// General Defines
+// Constants
 #define NAME "pose_noise_generator"
+#define BUFFER_IN 1
+#define BUFFER_OUT 1
+
 
 libnoise::NoiseGenerator noise_generator;
 
@@ -53,9 +56,10 @@ ros::Subscriber subscriber;
 template <typename T> void callback(const T in)
 {
     T out = in;
-    libnoise::Pose p_in = libnoise::import<T>(in);
-    libnoise::Pose p_out = noise_generator.addNoise(p)
-    publisher.publish(libnoise::export<T>(p_out, out));
+    libnoise::Pose p_in = libnoise::fromROS<T>(in);
+    libnoise::Pose p_out = noise_generator.addNoise(p_in);
+    out = libnoise::toROS<T>(p_out, out);
+    publisher.publish(out);
 }
 
 
@@ -83,7 +87,7 @@ int main(int argc, char **argv)
 
         noise_generator.setNoiseType(new libnoise::GaussianNoise(noise_mean, noise_stddev));
     }
-    else throw new Exception("Unkown noise_type");
+    else throw "Unkown noise_type";
 
 
     std::string message_type = "geometry_msgs/Pose";
@@ -91,10 +95,15 @@ int main(int argc, char **argv)
 
     if (message_type == "geometry_msgs/Pose")
     {
-        publisher = nh.advertise<geometry_msgs/Pose>("out", BUFFER_OUT);
-        subscriber = nh.subscribe("in", BUFFER_IN, callback);
+        publisher = nh.advertise<geometry_msgs::Pose>("out", BUFFER_OUT);
+        subscriber = nh.subscribe("in", BUFFER_IN, callback<geometry_msgs::Pose>);
     }
-    else throw new Exception("Unkown message_type");
+    else if (message_type == "geometry_msgs/PoseStamped")
+    {
+        publisher = nh.advertise<geometry_msgs::PoseStamped>("out", BUFFER_OUT);
+        subscriber = nh.subscribe("in", BUFFER_IN, callback<geometry_msgs::PoseStamped>);
+    }
+    else throw "Unkown message_type";
 
     ros::spin();
     return 0;

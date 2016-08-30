@@ -36,6 +36,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 *******************************************************************************/
 
+#include <ctime>
 #include <boost/random.hpp>
 #include <boost/random/normal_distribution.hpp>
 
@@ -73,6 +74,7 @@ namespace libnoise
         GaussianNoise(double mean = 0.0, double stddev = 1.0)
         : normal(mean, stddev)
         , generator(this->rng, this->normal)
+        , rng(std::time(0))
         {
         }
 
@@ -80,9 +82,9 @@ namespace libnoise
         {
             Pose out;
 
-            out.x = in.x + (*generator)();
-            out.y = in.y + (*generator)();
-            out.z = in.z + (*generator)();
+            out.x = in.x + generator();
+            out.y = in.y + generator();
+            out.z = in.z + generator();
 
             return out;
         }
