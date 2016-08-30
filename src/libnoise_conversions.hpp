@@ -1,5 +1,5 @@
-#ifndef LIBNOISE_H_
-#define LIBNOISE_H_
+#ifndef LIBNOISE_CONVERSIONS_H_
+#define LIBNOISE_CONVERSIONS_H_
 
 /*******************************************************************************
 
@@ -36,96 +36,51 @@ POSSIBILITY OF SUCH DAMAGE.
 
 *******************************************************************************/
 
-#include <boost/random.hpp>
-#include <boost/random/normal_distribution.hpp>
+#include "libnoise.hpp"
+#include "geometry_msgs/Pose.h"
+#include "geometry_msgs/PoseStamped.h"
 
 namespace libnoise
 {
-    struct Pose
+    template <typename T> Pose import(T);
+
+    template <> Pose import(const geometry_msgs::Pose in)
     {
-        double x;
-        double y;
-        double z;
+        Pose out;
+        out.x = in.position.x;
+        out.y = in.position.y;
+        out.z = in.position.z;
+        out.qx = in.orientation.x;
+        out.qy = in.orientation.y;
+        out.qz = in.orientation.z;
+        out.qw = in.orientation.z;
+        return out;
+    }
 
-        double qx;
-        double qy;
-        double qz;
-        double qw;
-    };
-
-
-    class AbstractNoise
+    template <> Pose import(const geometry_msgs::PoseStamped in)
     {
-    public:
-        virtual Pose run(Pose) = 0;
-    };
+        return import(in.pose);
+    }
 
+    template <typename T> T export(Pose, T);
 
-    class GaussianNoise : public AbstractNoise
+    template <> geometry_msgs::Pose export(Pose in, geometry_msgs::Pose base)
     {
-    protected:
-        boost::mt19937 rng;
-        boost::normal_distribution<> normal;
-        boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > generator;
+        base.position.x = in.x;
+        base.position.y = in.y;
+        base.position.z = in.z;
+        base.orientation.x = in.qx;
+        base.orientation.y = in.qy;
+        base.orientation.z = in.qz;
+        base.orientation.w = in.qw;
+        return base;
+    }
 
-    public:
-
-        GaussianNoise(double mean = 0.0, double stddev = 1.0)
-        : normal(mean, stddev)
-        , generator(this->rng, this->normal)
-        {
-        }
-
-        Pose run(Pose in)
-        {
-            Pose out;
-
-            out.x = in.x + (*generator)();
-            out.y = in.y + (*generator)();
-            out.z = in.z + (*generator)();
-
-            return out;
-        }
-
-    };
-
-
-    class NoiseGenerator
+    template <> geometry_msgs::PoseStamped export(Pose in, geometry_msgs::PoseStamped base)
     {
-    private:
-        AbstractNoise* pNoise = NULL;
+        base.pose = export(in, base.pose);
+        return base;
+    }
 
-    public:
-
-        NoiseGenerator()
-        {
-        }
-
-        NoiseGenerator(AbstractNoise& noise_type)
-        {
-            this->setNoiseType(noise_type);
-        }
-
-        ~NoiseGenerator()
-        {
-            delete this->pNoise;
-        }
-
-        void setNoiseType(AbstractNoise& noise_type)
-        {
-            this->pNoise = &noise_type;
-        }
-
-        void setNoiseType(AbstractNoise* noise_type)
-        {
-            this->pNoise = noise_type;
-        }
-
-        Pose addNoise(Pose in)
-        {
-            return this->pNoise->run(in);
-        }
-    };
-}
 
 #endif
