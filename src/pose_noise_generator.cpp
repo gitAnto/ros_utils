@@ -50,11 +50,12 @@ ros::Subscriber subscriber;
 
 // Callbacks
 
-template <typename T> void callback(T in)
+template <typename T> void callback(const T in)
 {
+    T out = in;
     libnoise::Pose p_in = libnoise::import<T>(in);
     libnoise::Pose p_out = noise_generator.addNoise(p)
-    publisher.publish(libnoise::export<T>(p_out, in));
+    publisher.publish(libnoise::export<T>(p_out, out));
 }
 
 
@@ -90,7 +91,7 @@ int main(int argc, char **argv)
 
     if (message_type == "geometry_msgs/Pose")
     {
-        publisher = nh.advertise<sensor_msgs::CameraInfo>("out", BUFFER_OUT);
+        publisher = nh.advertise<geometry_msgs/Pose>("out", BUFFER_OUT);
         subscriber = nh.subscribe("in", BUFFER_IN, callback);
     }
     else throw new Exception("Unkown message_type");
