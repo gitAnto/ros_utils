@@ -53,7 +53,7 @@ namespace libnoise
         out.qx = in.orientation.x;
         out.qy = in.orientation.y;
         out.qz = in.orientation.z;
-        out.qw = in.orientation.z;
+        out.qw = in.orientation.w;
         return out;
     }
 
