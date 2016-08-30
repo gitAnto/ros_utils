@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 
         ROS_INFO("- noise_type: %s", noise_type.c_str());
     }
-    else throw "Unkown noise_type";
+    else { ROS_FATAL("Unkown noise_type '%s'", noise_type.c_str()); return 1; }
 
 
     std::string message_type = "geometry_msgs/Pose";
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
         publisher = nh.advertise<geometry_msgs::PoseStamped>("out", BUFFER_OUT);
         subscriber = nh.subscribe("in", BUFFER_IN, callback<geometry_msgs::PoseStamped>);
     }
-    else throw "Unkown message_type";
+    else { ROS_FATAL("Unkown message_type '%s'", message_type.c_str()); return 1; }
 
     ros::spin();
     return 0;
