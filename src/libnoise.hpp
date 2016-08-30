@@ -1,3 +1,6 @@
+#ifndef LIBNOISE_H_
+#define LIBNOISE_H_
+
 #include <boost/random.hpp>
 #include <boost/random/normal_distribution.hpp>
 
@@ -94,3 +97,5 @@ namespace libnoise
         }
     };
 }
+
+#endif
