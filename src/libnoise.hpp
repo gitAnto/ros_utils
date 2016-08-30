@@ -55,6 +55,52 @@ namespace libnoise
     };
 
 
+    template <typename A, typename B> Pose random_quaternion(boost::variate_generator<A,B> generator)
+    {
+        Pose out;
+        out.x = 0.0;
+        out.y = 0.0;
+        out.z = 0.0;
+        out.qx = generator();
+        out.qy = generator();
+        out.qz = generator();
+        out.qw = generator();
+        double module = std::sqrt(out.qx*out.qx + out.qy*out.qy + out.qz*out.qz + out.qw*out.qw);
+        out.qx /= module;
+        out.qy /= module;
+        out.qz /= module;
+        out.qw /= module;
+        return out;
+    }
+
+
+    Pose quaternion_slerp(Pose a, Pose b, double t)
+    {
+        Pose r;
+        r.x = 0.0;
+        r.y = 0.0;
+        r.z = 0.0;
+        if (t > 1.0) t = 1.0;
+        if (t < 0.0) t = 0.0;
+    	double t_ = 1 - t;
+    	double Wa, Wb;
+    	double theta = acos(a.qx*b.qx + a.qy*b.qy + a.qz*b.qz + a.qw*b.qw);
+    	double sn = sin(theta);
+    	Wa = std::sin(t_*theta) / sn;
+    	Wb = std::sin(t*theta) / sn;
+    	r.qx = Wa*a.qx + Wb*b.qx;
+    	r.qy = Wa*a.qy + Wb*b.qy;
+    	r.qz = Wa*a.qz + Wb*b.qz;
+    	r.qw = Wa*a.qw + Wb*b.qw;
+    	double module = std::sqrt(r.qx*r.qx + r.qy*r.qy + r.qz*r.qz + r.qw*r.qw);
+        r.qx /= module;
+        r.qy /= module;
+        r.qz /= module;
+        r.qw /= module;
+    	return r;
+    }
+
+
     class AbstractNoise
     {
     public:
@@ -82,13 +128,11 @@ namespace libnoise
         Pose run(Pose in)
         {
             Pose out;
+            Pose quat = random_quaternion(this->generator);
+            out = quaternion_slerp(in, quat, generator());
             out.x = in.x + generator();
             out.y = in.y + generator();
             out.z = in.z + generator();
-            out.qx = in.qx;
-            out.qy = in.qy;
-            out.qz = in.qz;
-            out.qw = in.qw;
             return out;
         }
 
