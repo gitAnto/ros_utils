@@ -37,6 +37,7 @@ POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
 #include <ctime>
+#include <cmath>
 #include <boost/random.hpp>
 #include <boost/random/normal_distribution.hpp>
 
@@ -47,7 +48,6 @@ namespace libnoise
         double x;
         double y;
         double z;
-
         double qx;
         double qy;
         double qz;
@@ -69,6 +69,7 @@ namespace libnoise
         boost::normal_distribution<> normal;
         boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > generator;
 
+
     public:
 
         GaussianNoise(double mean = 0.0, double stddev = 1.0)
@@ -81,11 +82,13 @@ namespace libnoise
         Pose run(Pose in)
         {
             Pose out;
-
             out.x = in.x + generator();
             out.y = in.y + generator();
             out.z = in.z + generator();
-
+            out.qx = in.qx;
+            out.qy = in.qy;
+            out.qz = in.qz;
+            out.qw = in.qw;
             return out;
         }
 
@@ -106,11 +109,6 @@ namespace libnoise
         NoiseGenerator(AbstractNoise& noise_type)
         {
             this->setNoiseType(noise_type);
-        }
-
-        ~NoiseGenerator()
-        {
-            delete this->pNoise;
         }
 
         void setNoiseType(AbstractNoise& noise_type)

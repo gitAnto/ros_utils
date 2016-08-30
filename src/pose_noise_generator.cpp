@@ -86,6 +86,8 @@ int main(int argc, char **argv)
         np.param<double>("noise_stddev", noise_stddev, noise_stddev);
 
         noise_generator.setNoiseType(new libnoise::GaussianNoise(noise_mean, noise_stddev));
+
+        ROS_INFO("- noise_type: %s", noise_type.c_str());
     }
     else throw "Unkown noise_type";
 
@@ -97,6 +99,8 @@ int main(int argc, char **argv)
     {
         publisher = nh.advertise<geometry_msgs::Pose>("out", BUFFER_OUT);
         subscriber = nh.subscribe("in", BUFFER_IN, callback<geometry_msgs::Pose>);
+
+        ROS_INFO("- message_type: %s", message_type.c_str());
     }
     else if (message_type == "geometry_msgs/PoseStamped")
     {
