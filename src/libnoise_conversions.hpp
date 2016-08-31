@@ -114,7 +114,7 @@ namespace libnoise
         return base;
     }
 
-    /* geometry_msgs::TransformStamped ***********************************************/
+    /* geometry_msgs::TransformStamped ****************************************/
 
     template <> Pose fromROS(const geometry_msgs::TransformStamped in)
     {
