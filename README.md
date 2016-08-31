@@ -25,11 +25,11 @@ This node adds noise to a topic.
 Currently supports only *Gaussian* noise and the topics listed under `message_type` in *Param* section.
 
 #### Subscribed Topics
-- `in` *<programmable topic type, see Params>*<br/>
+- `in` *(programmable topic type, see Params)*<br/>
   Input topic without noise.
 
 #### Published Topics
-- `out` *<programmable topic type, see Params>*<br/>
+- `out` *(programmable topic type, see Params)*<br/>
   Output topic with noise.
 
 #### Params
