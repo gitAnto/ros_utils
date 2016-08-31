@@ -37,7 +37,7 @@ Currently supports only *Gaussian* noise and the topics listed under `message_ty
   - "Gaussian" noise Params:
     - `noise_mean` *double* (default "0.0")
     - `noise_stddev` *double* (default "1.0")
-- `message_type` *string* (default "")<br/>
+- `message_type` *string* (default "geometry_msgs/Pose")<br/>
   Can be:
   - `geometry_msgs/Pose`
   - `geometry_msgs/PoseStamped`
