@@ -14,9 +14,35 @@ BSD 3-Clause. See `LICENSE` file.
 
 ## Nodes
 
+- [pose_noise_generator](#pose_noise_generator)
 - [rgbd_throttle](#rgbd_throttle)
 - [tf_link_map_to_world](#tf_link_map_to_world)
 - [tf_eval](#tf_eval)
+
+
+### pose_noise_generator
+This node adds noise to a topic.
+Currently supports only *Gaussian* noise and the topics listed under `message_type` in *Param* section.
+
+#### Subscribed Topics
+- `in` *<programmable topic type, see Params>*<br/>
+  Input topic without noise.
+
+#### Published Topics
+- `out` *<programmable topic type, see Params>*<br/>
+  Output topic with noise.
+
+#### Params
+- `noise_type` *string* (default "Gaussian")<br/>
+  - "Gaussian" noise Params:
+    - `noise_mean` *double* (default "0.0")
+    - `noise_stddev` *double* (default "1.0")
+- `message_type` *string* (default "")<br/>
+  Can be:
+  - `geometry_msgs/Pose`
+  - `geometry_msgs/PoseStamped`
+  - `geometry_msgs/Transform`
+  - `geometry_msgs/TransformStamped`
 
 
 ### rgbd_throttle
@@ -95,4 +121,3 @@ file. Each line of the file contains (in order):
   Output filename.
 - `csv_delimiter` *string* (default: " ")<br/>
   Csv field delimiter.
-
