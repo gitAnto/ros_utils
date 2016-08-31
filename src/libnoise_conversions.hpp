@@ -39,10 +39,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "libnoise.hpp"
 #include "geometry_msgs/Pose.h"
 #include "geometry_msgs/PoseStamped.h"
+#include "geometry_msgs/TransformStamped.h"
 
 namespace libnoise
 {
     template <typename T> Pose fromROS(T) { /**/ }
+
+    template <typename T> T toROS(Pose, T) { /**/ }
+
+    /* geometry_msgs::Pose ****************************************************/
 
     template <> Pose fromROS(const geometry_msgs::Pose in)
     {
@@ -57,13 +62,6 @@ namespace libnoise
         return out;
     }
 
-    template <> Pose fromROS(const geometry_msgs::PoseStamped in)
-    {
-        return fromROS(in.pose);
-    }
-
-    template <typename T> T toROS(Pose, T) { /**/ }
-
     template <> geometry_msgs::Pose toROS(Pose in, geometry_msgs::Pose base)
     {
         base.position.x = in.x;
@@ -76,9 +74,56 @@ namespace libnoise
         return base;
     }
 
+    /* geometry_msgs::PoseStamped *********************************************/
+
+    template <> Pose fromROS(const geometry_msgs::PoseStamped in)
+    {
+        return fromROS(in.pose);
+    }
+
     template <> geometry_msgs::PoseStamped toROS(Pose in, geometry_msgs::PoseStamped base)
     {
         base.pose = toROS(in, base.pose);
+        return base;
+    }
+
+    /* geometry_msgs::Transform ***********************************************/
+
+    template <> Pose fromROS(const geometry_msgs::Transform in)
+    {
+        Pose out;
+        out.x = in.translation.x;
+        out.y = in.translation.y;
+        out.z = in.translation.z;
+        out.qx = in.rotation.x;
+        out.qy = in.rotation.y;
+        out.qz = in.rotation.z;
+        out.qw = in.rotation.w;
+        return out;
+    }
+
+    template <> geometry_msgs::Transform toROS(Pose in, geometry_msgs::Transform base)
+    {
+        base.translation.x = in.x;
+        base.translation.y = in.y;
+        base.translation.z = in.z;
+        base.rotation.x = in.qx;
+        base.rotation.y = in.qy;
+        base.rotation.z = in.qz;
+        base.rotation.w = in.qw;
+        return base;
+    }
+
+    /* geometry_msgs::TransformStamped ***********************************************/
+
+    template <> Pose fromROS(const geometry_msgs::TransformStamped in)
+    {
+        return fromROS(in.transform);
+    }
+
+    template <> geometry_msgs::TransformStamped toROS(Pose in, geometry_msgs::TransformStamped base)
+    {
+        base.transform = toROS(in, base.transform);
         return base;
     }
 

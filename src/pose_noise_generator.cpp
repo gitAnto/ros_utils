@@ -34,8 +34,6 @@ POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
 #include "ros/ros.h"
-#include "geometry_msgs/Pose.h"
-#include "geometry_msgs/PoseStamped.h"
 #include "libnoise.hpp"
 #include "libnoise_conversions.hpp"
 
@@ -74,6 +72,8 @@ int main(int argc, char **argv)
     ROS_INFO("Initializing node '%s' ...", NAME);
 
 
+    // READ PARAMETERS FOR NOISE
+
     std::string noise_type = "Gaussian";
     np.param<std::string>("noise_type", noise_type, noise_type);
 
@@ -89,8 +89,14 @@ int main(int argc, char **argv)
 
         ROS_INFO("- noise_type: %s", noise_type.c_str());
     }
-    else { ROS_FATAL("Unkown noise_type '%s'", noise_type.c_str()); return 1; }
+    else
+    {
+        ROS_FATAL("Unkown noise_type '%s'", noise_type.c_str());
+        return 1;
+    }
 
+
+    // READ PARAMETERS FOR MESSAGE TYPE
 
     std::string message_type = "geometry_msgs/Pose";
     np.param<std::string>("message_type", message_type, message_type);
@@ -107,7 +113,21 @@ int main(int argc, char **argv)
         publisher = nh.advertise<geometry_msgs::PoseStamped>("out", BUFFER_OUT);
         subscriber = nh.subscribe("in", BUFFER_IN, callback<geometry_msgs::PoseStamped>);
     }
-    else { ROS_FATAL("Unkown message_type '%s'", message_type.c_str()); return 1; }
+    else if (message_type == "geometry_msgs/TransformStamped")
+    {
+        publisher = nh.advertise<geometry_msgs::TransformStamped>("out", BUFFER_OUT);
+        subscriber = nh.subscribe("in", BUFFER_IN, callback<geometry_msgs::TransformStamped>);
+    }
+    else if (message_type == "geometry_msgs/Transform")
+    {
+        publisher = nh.advertise<geometry_msgs::Transform>("out", BUFFER_OUT);
+        subscriber = nh.subscribe("in", BUFFER_IN, callback<geometry_msgs::Transform>);
+    }
+    else
+    {
+        ROS_FATAL("Unkown message_type '%s'", message_type.c_str());
+        return 1;
+    }
 
     ros::spin();
     return 0;
