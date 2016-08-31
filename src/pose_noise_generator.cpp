@@ -110,15 +110,15 @@ int main(int argc, char **argv)
         publisher = nh.advertise<geometry_msgs::PoseStamped>("out", BUFFER_OUT);
         subscriber = nh.subscribe("in", BUFFER_IN, callback<geometry_msgs::PoseStamped>);
     }
-    else if (message_type == "geometry_msgs/TransformStamped")
-    {
-        publisher = nh.advertise<geometry_msgs::TransformStamped>("out", BUFFER_OUT);
-        subscriber = nh.subscribe("in", BUFFER_IN, callback<geometry_msgs::TransformStamped>);
-    }
     else if (message_type == "geometry_msgs/Transform")
     {
         publisher = nh.advertise<geometry_msgs::Transform>("out", BUFFER_OUT);
         subscriber = nh.subscribe("in", BUFFER_IN, callback<geometry_msgs::Transform>);
+    }
+    else if (message_type == "geometry_msgs/TransformStamped")
+    {
+        publisher = nh.advertise<geometry_msgs::TransformStamped>("out", BUFFER_OUT);
+        subscriber = nh.subscribe("in", BUFFER_IN, callback<geometry_msgs::TransformStamped>);
     }
     else
     {
