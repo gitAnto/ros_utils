@@ -39,6 +39,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "libnoise.hpp"
 #include "geometry_msgs/Pose.h"
 #include "geometry_msgs/PoseStamped.h"
+#include "geometry_msgs/Transform.h"
 #include "geometry_msgs/TransformStamped.h"
 
 namespace libnoise
