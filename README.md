@@ -14,11 +14,25 @@ BSD 3-Clause. See `LICENSE` file.
 
 ## Nodes
 
+- [image_encoding_converter](#image_encoding_converter)
 - [pose_noise_generator](#pose_noise_generator)
 - [rgbd_throttle](#rgbd_throttle)
 - [tf_link_map_to_world](#tf_link_map_to_world)
 - [tf_eval](#tf_eval)
 
+
+### image_encoding_converter
+This node converts the encoding of an image topic to `BGR8`.
+
+#### Subscribed Topics
+- `image_in` *sensor_msgs::Image*<br/>
+  Input image topic.
+
+#### Published Topics
+- `image_out` *sensor_msgs::Image*<br/>
+  Output image topic.
+
+---
 
 ### pose_noise_generator
 This node adds noise to a topic.
@@ -44,6 +58,7 @@ Currently supports only *Gaussian* noise and the topics listed under `message_ty
   - `geometry_msgs/Transform`
   - `geometry_msgs/TransformStamped`
 
+---
 
 ### rgbd_throttle
 This node limits the frame rate of an RGBD camera.
@@ -72,6 +87,7 @@ This node limits the frame rate of an RGBD camera.
 - `rate` *double* (default "5.0")<br/>
   Maximum framerate allowed.
 
+---
 
 ### tf_link_map_to_world
 This package links a disconnected sub-tree to the `/tf` root.
@@ -99,6 +115,7 @@ between `/world` and `/map` is given by the first transform from
 - `rate` *double* (default "10.0")<br/>
   Frequency of the tf broadcaster.
 
+---
 
 ### tf_eval
 Evaluates the relative transform of between two frames and outputs it to a csv
