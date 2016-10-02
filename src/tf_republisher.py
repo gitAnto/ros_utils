@@ -23,7 +23,8 @@ class tf_republisher(object):
         message_mod = message
         transforms_mod = []
         for t in message.transforms:
-            if t.header.frame_id == self.original_frame_id and t.child_frame_id == self.original_child_frame_id:
+            if  self.is_original_frame_id(t.header.frame_id)\
+            and self.is_original_child_frame_id(t.child_frame_id):
                 t.header.frame_id = self.new_frame_id
                 t.child_frame_id  = self.new_child_frame_id
                 transforms_mod.append(t)
@@ -31,20 +32,28 @@ class tf_republisher(object):
             message_mod.transforms = transforms_mod
             self.pub.publish(message_mod)
 
+    def is_original_frame_id(self, frame_id):
+        a = frame_id.lstrip('/')
+        b = self.original_frame_id.lstrip('/')
+        return  a == b
+
+    def is_original_child_frame_id(self, child_frame_id):
+        a = child_frame_id.lstrip('/')
+        b = self.original_child_frame_id.lstrip('/')
+        return a == b
+
     def initialize_params(self):
-        self.queue = rospy.get_param('queue', 10)
-        self.original_frame_id       = rospy.get_param('original_frame_id',       '/world')
-        self.original_child_frame_id = rospy.get_param('original_child_frame_id', '/vicon/puma/puma')
-        self.original_tf_topic       = rospy.get_param('original_tf_topic',       '/tf')
-        self.new_frame_id            = rospy.get_param('new_frame_id',            '/world_new')
-        self.new_child_frame_id      = rospy.get_param('new_child_frame_id',      '/vicon/puma/puma_new')
-        self.new_tf_topic            = rospy.get_param('new_tf_topic',            '/tf_new')
+        self.queue = rospy.get_param('~queue', 10)
+        self.original_frame_id       = rospy.get_param('~original_frame_id',       '/world')
+        self.original_child_frame_id = rospy.get_param('~original_child_frame_id', '/vicon/puma/puma')
+        self.new_frame_id            = rospy.get_param('~new_frame_id',            '/world_new')
+        self.new_child_frame_id      = rospy.get_param('~new_child_frame_id',      '/vicon/puma/puma_new')
 
     def initialize_publisher(self):
-        self.pub = rospy.Publisher(self.new_tf_topic, tfMessage, queue_size=self.queue)
+        self.pub = rospy.Publisher('tf_new', tfMessage, queue_size=self.queue)
 
     def initialize_subscriber(self):
-        self.sub = rospy.Subscriber(self.original_tf_topic, tfMessage, self.callback)
+        self.sub = rospy.Subscriber('tf_old', tfMessage, self.callback)
 
 if __name__ == '__main__':
     tfr = tf_republisher()

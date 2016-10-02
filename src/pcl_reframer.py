@@ -28,16 +28,14 @@ class pcl_reframer(object):
         self.lock.release()
 
     def initialize_params(self):
-        self.queue                   = rospy.get_param('queue', 10)
-        self.new_frame_id            = rospy.get_param('new_frame_id',  '/new_frame_id')
-        self.pcl_topic_in            = rospy.get_param('pcl_topic_in',  '/pcl_in')
-        self.pcl_topic_out           = rospy.get_param('pcl_topic_out', '/pcl_out')
+        self.queue          = rospy.get_param('~queue', 10)
+        self.new_frame_id   = rospy.get_param('~new_frame_id',  '/new_frame_id')
 
     def initialize_publisher(self):
-        self.pub = rospy.Publisher(self.pcl_topic_out, PointCloud2, queue_size=self.queue)
+        self.pub = rospy.Publisher('pcl_out', PointCloud2, queue_size=self.queue)
 
     def initialize_subscriber(self):
-        self.sub = rospy.Subscriber(self.pcl_topic_in, PointCloud2, self.callback)
+        self.sub = rospy.Subscriber('pcl_in', PointCloud2, self.callback)
 
     def initialize_lock(self):
         self.lock = Lock()
