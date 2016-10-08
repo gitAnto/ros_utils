@@ -15,6 +15,7 @@ BSD 3-Clause. See `LICENSE` file.
 ## Nodes
 
 - [tf_republisher](#tf_republisher)
+- [pcl_reframer](#pcl_reframer)
 - [image_encoding_converter](#image_encoding_converter)
 - [pose_noise_generator](#pose_noise_generator)
 - [rgbd_throttle](#rgbd_throttle)
@@ -40,6 +41,23 @@ from that topic to another one, eventually changing message `frame_id`s.
 - `original_child_frame_id` *string* (default "/vicon/puma/puma")
 - `new_frame_id` *string* (default "/world_new")
 - `new_child_frame_id` *string* (default "/vicon/puma/puma_new")
+
+---
+
+### pcl_reframer
+This node read `PointCloud2` messages from a topic and republishes it on anothre
+topic changing the PointCloud `frame_id`.
+
+#### Subscribed Topics
+- `pcl_in` *sensor_msgs::PointCloud2*<br/>
+  Input PointCloud topic.
+
+#### Published Topics
+- `pcl_out` *sensor_msgs::PointCloud2*<br/>
+  Output PointCloud topic with `frame_id` changed.
+
+#### Params
+- `new_frame_id` *string* (default "/new_frame_id")
 
 ---
 
