@@ -14,11 +14,32 @@ BSD 3-Clause. See `LICENSE` file.
 
 ## Nodes
 
+- [tf_republisher](#tf_republisher)
 - [image_encoding_converter](#image_encoding_converter)
 - [pose_noise_generator](#pose_noise_generator)
 - [rgbd_throttle](#rgbd_throttle)
 - [tf_link_map_to_world](#tf_link_map_to_world)
 - [tf_eval](#tf_eval)
+
+---
+
+### tf_republisher
+This node read messages from a `tf` topic and re-publishes particular transforms
+from that topic to another one, eventually changing message `frame_id`s.
+
+#### Subscribed Topics
+- `tf_old` *tf::tfMessage*<br/>
+  Input tf topic. Should usually be remapped to `/tf`.
+
+#### Published Topics
+- `tf_new` *tf::tfMessage*<br/>
+  Output tf topic.
+
+#### Params
+- `original_frame_id` *string* (default "/world")
+- `original_child_frame_id` *string* (default "/vicon/puma/puma")
+- `new_frame_id` *string* (default "/world_new")
+- `new_child_frame_id` *string* (default "/vicon/puma/puma_new")
 
 ---
 
