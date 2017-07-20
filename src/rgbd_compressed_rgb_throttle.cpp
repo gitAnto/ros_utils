@@ -69,9 +69,16 @@ double secs;
 double last_sent;
 
 sensor_msgs::CameraInfo rgb_info;
+
 sensor_msgs::CompressedImage rgb_compressed;
+sensor_msgs::CompressedImage rgb_compressed_old;
+sensor_msgs::CompressedImage rgb_compressed_oldd;
+
 sensor_msgs::CameraInfo depth_info;
+
 sensor_msgs::Image depth_image;
+sensor_msgs::Image depth_image_old;
+sensor_msgs::Image depth_image_oldd;
 
 // Callbacks
 
@@ -82,6 +89,8 @@ void callback_rgb_info(const sensor_msgs::CameraInfo& data)
 
 void callback_rgb_compressed(const sensor_msgs::CompressedImage& data)
 {
+    rgb_compressed_oldd = rgb_compressed_old;
+    rgb_compressed_old = rgb_compressed;
     rgb_compressed = data;
 }
 
@@ -92,14 +101,55 @@ void callback_depth_info(const sensor_msgs::CameraInfo& data)
 
 void callback_depth_image(const sensor_msgs::Image& data)
 {
+    depth_image_oldd = depth_image_old;
+    depth_image_old = depth_image;
     depth_image = data;
 
     if (data.header.stamp.toSec() >= last_sent + secs)
     {
+        ros::Time t_depth = depth_image.header.stamp;
+        ros::Time t_rgb   = rgb_compressed.header.stamp;
+
+        if(t_depth <= t_rgb)
+        {
+            sensor_msgs::CompressedImage rgb2pub;
+            //t_depth as a ref
+            if(t_depth == rgb_compressed.header.stamp)
+                rgb2pub = rgb_compressed;
+            else
+                if(t_depth == rgb_compressed_old.header.stamp)
+                    rgb2pub = rgb_compressed_old;
+                else
+                    if(t_depth == rgb_compressed_oldd.header.stamp)
+                        rgb2pub = rgb_compressed_oldd;
+                    else
+                        ROS_WARN("Warning: no corrispondence!");
+
+            pub_rgb_compressed.publish(rgb2pub);
+            pub_depth_image.publish(depth_image);
+
+        }
+        else
+        {
+            //t_rgb as a ref
+            sensor_msgs::Image depth2pub;
+            if(t_rgb == depth_image.header.stamp)
+                depth2pub = depth_image;
+            else
+                if(t_depth == depth_image_old.header.stamp)
+                    depth2pub = depth_image_old;
+                else
+                    if(t_depth == depth_image_oldd.header.stamp)
+                        depth2pub = depth_image_oldd;
+                    else
+                        ROS_WARN("Warning: no corrispondence!");
+
+            pub_rgb_compressed.publish(rgb_compressed);
+            pub_depth_image.publish(depth2pub);
+        }
+
         pub_rgb_info.publish(rgb_info);
-        pub_rgb_compressed.publish(rgb_compressed);
         pub_depth_info.publish(depth_info);
-        pub_depth_image.publish(depth_image);
         last_sent = data.header.stamp.toSec();
     }
 }
@@ -109,7 +159,7 @@ void callback_depth_image(const sensor_msgs::Image& data)
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, NAME);
-    ros::NodeHandle n;
+    ros::NodeHandle n("~");
 
     ROS_INFO("Initializing node '%s' ...", NAME);
 
