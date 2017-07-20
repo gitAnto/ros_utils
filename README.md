@@ -2,8 +2,9 @@
 
 ROS catkin package containing some simple but useful nodes.
 
-Copyright (c) 2016 
-Antonio Coratelli
+Copyright (c) 2016
+
+Antonio Coratelli,
 Antonio Petitti
 
 
