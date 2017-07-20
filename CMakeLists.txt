@@ -7,6 +7,10 @@ catkin_package()
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
+add_executable(rgbd_compressed_rgb_throttle src/rgbd_compressed_rgb_throttle.cpp)
+target_link_libraries(rgbd_compressed_rgb_throttle ${catkin_LIBRARIES})
+add_dependencies(rgbd_compressed_rgb_throttle ros_utils_generate_messages_cpp)
+
 add_executable(rgbd_throttle_mix src/rgbd_throttle_.cpp)
 target_link_libraries(rgbd_throttle_mix ${catkin_LIBRARIES})
 add_dependencies(rgbd_throttle_mix ros_utils_generate_messages_cpp)

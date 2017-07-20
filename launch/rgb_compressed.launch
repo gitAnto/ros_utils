@@ -1,0 +1,15 @@
+<!-- Launch in the camera namespace-->
+<launch>
+
+	
+	<!-- run the node -->
+	<node pkg="ros_utils" type="rgbd_compressed_rgb_throttle" name="throttle" output="screen">
+		<!-- params -->
+		<param name="rate" 							type="double" value="3.0" />
+		<!-- remap topics -->
+		<remap from="rgb/info_in"      to="/camera/rgb/camera_info" />
+		<remap from="rgb/compressed_in"     to="/camera/rgb/image_raw/compressed" />
+		<remap from="depth/info_in"    to="/camera/depth/camera_info" />
+		<remap from="depth/image_in"   to="/camera/depth/image_raw" />
+	</node>
+</launch>
