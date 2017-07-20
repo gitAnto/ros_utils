@@ -35,7 +35,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "ros/ros.h"
 #include "sensor_msgs/CameraInfo.h"
-#include "sensor_msgs/Image.h"
+#include "sensor_msgs/CompressedImage.h"
 
 // General Defines
 #define NAME "rgbd_throttle"
@@ -45,32 +45,32 @@ POSSIBILITY OF SUCH DAMAGE.
 
 // Input Defines
 #define RGB_INFO_IN   "rgb/info_in"
-#define RGB_RECT_IN   "rgb/rect_in"
+#define RGB_COMPRESSED_IN   "rgb/compressed_in"
 #define DEPTH_INFO_IN "depth/info_in"
-#define DEPTH_RECT_IN "depth/rect_in"
+#define DEPTH_COMPRESSED_IN "depth/compressed_in"
 #define BUFFER_IN 1
 
 // Output Defines
 #define RGB_INFO_OUT   "rgb/info_out"
-#define RGB_RECT_OUT   "rgb/rect_out"
+#define RGB_COMPRESSED_OUT   "rgb/compressed_out"
 #define DEPTH_INFO_OUT "depth/info_out"
-#define DEPTH_RECT_OUT "depth/rect_out"
+#define DEPTH_COMPRESSED_OUT "depth/compressed_out"
 #define BUFFER_OUT 1
 
 // Global Variables
 ros::Publisher pub_rgb_info;
-ros::Publisher pub_rgb_rect;
+ros::Publisher pub_rgb_compressed;
 ros::Publisher pub_depth_info;
-ros::Publisher pub_depth_rect;
+ros::Publisher pub_depth_compressed;
 
 double rate;
 double secs;
 double last_sent;
 
 sensor_msgs::CameraInfo rgb_info;
-sensor_msgs::Image      rgb_rect;
+sensor_msgs::CompressedImage rgb_compressed;
 sensor_msgs::CameraInfo depth_info;
-sensor_msgs::Image      depth_rect;
+sensor_msgs::CompressedImage depth_compressed;
 
 // Callbacks
 
@@ -79,9 +79,9 @@ void callback_rgb_info(const sensor_msgs::CameraInfo& data)
     rgb_info = data;
 }
 
-void callback_rgb_rect(const sensor_msgs::Image& data)
+void callback_rgb_compressed(const sensor_msgs::CompressedImage& data)
 {
-    rgb_rect = data;
+    rgb_compressed = data;
 }
 
 void callback_depth_info(const sensor_msgs::CameraInfo& data)
@@ -89,16 +89,16 @@ void callback_depth_info(const sensor_msgs::CameraInfo& data)
     depth_info = data;
 }
 
-void callback_depth_rect(const sensor_msgs::Image& data)
+void callback_depth_compressed(const sensor_msgs::CompressedImage& data)
 {
-    depth_rect = data;
+    depth_compressed = data;
 
     if (data.header.stamp.toSec() >= last_sent + secs)
     {
         pub_rgb_info.publish(rgb_info);
-        pub_rgb_rect.publish(rgb_rect);
+        pub_rgb_compressed.publish(rgb_compressed);
         pub_depth_info.publish(depth_info);
-        pub_depth_rect.publish(depth_rect);
+        pub_depth_compressed.publish(depth_compressed);
         last_sent = data.header.stamp.toSec();
     }
 }
@@ -122,14 +122,14 @@ int main(int argc, char **argv)
 
     // Advertise Publishers
     pub_rgb_info   = n.advertise<sensor_msgs::CameraInfo>(RGB_INFO_OUT,   BUFFER_OUT);
-    pub_rgb_rect   = n.advertise<sensor_msgs::Image     >(RGB_RECT_OUT,   BUFFER_OUT);
+    pub_rgb_compressed   = n.advertise<sensor_msgs::CompressedImage     >(RGB_COMPRESSED_OUT,   BUFFER_OUT);
     pub_depth_info = n.advertise<sensor_msgs::CameraInfo>(DEPTH_INFO_OUT, BUFFER_OUT);
-    pub_depth_rect = n.advertise<sensor_msgs::Image     >(DEPTH_RECT_OUT, BUFFER_OUT);
+    pub_depth_compressed = n.advertise<sensor_msgs::CompressedImage     >(DEPTH_COMPRESSED_OUT, BUFFER_OUT);
 
     ros::Subscriber sub_rgb_info   = n.subscribe(RGB_INFO_IN,   BUFFER_IN, callback_rgb_info);
-    ros::Subscriber sub_rgb_rect   = n.subscribe(RGB_RECT_IN,   BUFFER_IN, callback_rgb_rect);
+    ros::Subscriber sub_rgb_compressed   = n.subscribe(RGB_COMPRESSED_IN,   BUFFER_IN, callback_rgb_compressed);
     ros::Subscriber sub_depth_info = n.subscribe(DEPTH_INFO_IN, BUFFER_IN, callback_depth_info);
-    ros::Subscriber sub_depth_rect = n.subscribe(DEPTH_RECT_IN, BUFFER_IN, callback_depth_rect);
+    ros::Subscriber sub_depth_compressed = n.subscribe(DEPTH_COMPRESSED_IN, BUFFER_IN, callback_depth_compressed);
 
     ros::spin();
     return 0;
