@@ -69,6 +69,8 @@ ros::Publisher pub_depth_image;
 ros::Publisher pub_depth_rect;
 
 double rate;
+bool   compressed_depth;
+bool   compressed_rgb;
 double secs;
 double last_sent;
 
@@ -154,24 +156,24 @@ int main(int argc, char **argv)
 
     if(compressed_depth)
     {
-    	pub_depth_image = n.advertise<sensor_msgs::CompressedImage>(DEPTH_IMAGE_OUT, BUFFER_OUT);
-	ros::Subscriber sub_rgb_image   = n.subscribe(RGB_IMAGE_IN,   BUFFER_IN, callback_rgb_compressed);
+        pub_depth_image = n.advertise<sensor_msgs::CompressedImage>(DEPTH_IMAGE_OUT, BUFFER_OUT);
+	    ros::Subscriber sub_rgb_image   = n.subscribe(RGB_IMAGE_IN,   BUFFER_IN, callback_rgb_compressed);
     }
     else
     {
-	pub_depth_rect = n.advertise<sensor_msgs::Image>(DEPTH_RECT_OUT, BUFFER_OUT);
-	ros::Subscriber sub_rgb_rect   = n.subscribe(RGB_RECT_IN,   BUFFER_IN, callback_rgb_rect);
+    	pub_depth_rect = n.advertise<sensor_msgs::Image>(DEPTH_IMAGE_OUT, BUFFER_OUT);
+    	ros::Subscriber sub_rgb_rect   = n.subscribe(RGB_IMAGE_IN,   BUFFER_IN, callback_rgb_rect);
     }
 
     if(compressed_rgb)
     {
-	pub_rgb_image   = n.advertise<sensor_msgs::CompressedImage>(RGB_IMAGE_OUT,   BUFFER_OUT);
-        ros::Subscriber sub_depth_image = n.subscribe(DEPTH_IMAGE_IN, BUFFER_IN, callback_depth_compressed)
+	    pub_rgb_image   = n.advertise<sensor_msgs::CompressedImage>(RGB_IMAGE_OUT,   BUFFER_OUT);
+        ros::Subscriber sub_depth_image = n.subscribe(DEPTH_IMAGE_IN, BUFFER_IN, callback_depth_compressed);
     }
     else	
     {
-	pub_rgb_rect = n.advertise<sensor_msgs::Image>(RGB_RECT_OUT, BUFFER_OUT);
-        ros::Subscriber sub_depth_rect = n.subscribe(DEPTH_RECT_IN, BUFFER_IN, callback_depth_rect)
+	    pub_rgb_rect = n.advertise<sensor_msgs::Image>(RGB_IMAGE_OUT, BUFFER_OUT);
+        ros::Subscriber sub_depth_rect = n.subscribe(DEPTH_IMAGE_IN, BUFFER_IN, callback_depth_rect);
     }
 
 
