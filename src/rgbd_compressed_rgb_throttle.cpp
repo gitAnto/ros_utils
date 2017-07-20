@@ -110,20 +110,23 @@ void callback_depth_image(const sensor_msgs::Image& data)
         ros::Time t_depth = depth_image.header.stamp;
         ros::Time t_rgb   = rgb_compressed.header.stamp;
 
-        if(t_depth <= t_rgb)
+//	ROS_INFO("t_rgb: %f", t_rgb.toSec());
+//	ROS_INFO("t_depth: %f", t_depth.toSec());
+
+        if(t_depth.toSec() <= t_rgb.toSec())
         {
             sensor_msgs::CompressedImage rgb2pub;
             //t_depth as a ref
-            if(t_depth == rgb_compressed.header.stamp)
+            if(t_depth.toSec() == rgb_compressed.header.stamp.toSec())
                 rgb2pub = rgb_compressed;
             else
-                if(t_depth == rgb_compressed_old.header.stamp)
+                if(t_depth.toSec() == rgb_compressed_old.header.stamp.toSec())
                     rgb2pub = rgb_compressed_old;
                 else
-                    if(t_depth == rgb_compressed_oldd.header.stamp)
+                    if(t_depth.toSec() == rgb_compressed_oldd.header.stamp.toSec())
                         rgb2pub = rgb_compressed_oldd;
                     else
-                        ROS_WARN("Warning: no corrispondence!");
+                        ROS_WARN("Warning: no corrispondence! -- case depth");
 
             pub_rgb_compressed.publish(rgb2pub);
             pub_depth_image.publish(depth_image);
@@ -133,17 +136,21 @@ void callback_depth_image(const sensor_msgs::Image& data)
         {
             //t_rgb as a ref
             sensor_msgs::Image depth2pub;
-            if(t_rgb == depth_image.header.stamp)
+            if(t_rgb.toSec() == depth_image.header.stamp.toSec())
                 depth2pub = depth_image;
             else
-                if(t_depth == depth_image_old.header.stamp)
+                if(t_rgb.toSec() == depth_image_old.header.stamp.toSec())
                     depth2pub = depth_image_old;
                 else
-                    if(t_depth == depth_image_oldd.header.stamp)
+                    if(t_rgb.toSec() == depth_image_oldd.header.stamp.toSec())
                         depth2pub = depth_image_oldd;
                     else
-                        ROS_WARN("Warning: no corrispondence!");
-
+                        ROS_WARN("Warning: no corrispondence! -- case rgb");
+/*
+	    ROS_INFO("t_depth1: %f", depth_image.header.stamp.toSec());
+	    ROS_INFO("t_depth2: %f", depth_image_old.header.stamp.toSec());
+	    ROS_INFO("t_depth3: %f", depth_image_oldd.header.stamp.toSec());
+*/
             pub_rgb_compressed.publish(rgb_compressed);
             pub_depth_image.publish(depth2pub);
         }
