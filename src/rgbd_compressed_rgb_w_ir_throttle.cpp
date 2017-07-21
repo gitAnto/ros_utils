@@ -52,7 +52,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #define IR_INFO_IN "ir/info_in"
 #define IR_IMAGE_IN "ir/image_in"
 #define IR2_INFO_IN "ir2/info_in"
-#define IR2_IMAGE_IN "ir/image_in"
+#define IR2_IMAGE_IN "ir2/image_in"
 #define BUFFER_IN 1
 
 // Output Defines
@@ -63,7 +63,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #define IR_INFO_OUT "ir/info_out"
 #define IR_IMAGE_OUT "ir/image_out"
 #define IR2_INFO_OUT "ir2/info_out"
-#define IR2_IMAGE_OUT "ir/image_out"
+#define IR2_IMAGE_OUT "ir2/image_out"
 #define BUFFER_OUT 1
 
 // Global Variables
@@ -166,7 +166,7 @@ void callback_depth_image(const sensor_msgs::Image& data)
 
         int min_id = std::distance(stamps, std::min_element(stamps, stamps + 4));
 
-        ROS_INFO("min is in position: %d",min_id);
+        //ROS_INFO("min is in position: %d",min_id);
 
         switch(min_id)
         {
